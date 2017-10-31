@@ -2,10 +2,61 @@
 
 var budgetController = function (){
     
+    // Exppense Constructor
+    var Expense = function (id, description, value){
+        this.id = id,
+        this.description = description,
+        this.value = value
+    };
+    
+    // Income Constructor
+    var Income =  function  (id, description, value){
+        this.id = id,
+        this.description = description,
+        this.value = value
+    };
 
+    // Data Structure
+    var data = {
+        allItems : {
+            exp : [],
+            inc : []
+        },
+        totals : {
+            exp : 0,
+            inc : 0
+        }
+    };
+    
     return {
+        addItem : function (type, desc, val){
+            
+        var newItem, type, ID;
         
+            // [1 2 3 6] Calculating the next ID
+        if (ID > 0) {
+        ID = data.allItems[type][data.allItems[type].length -1].id + 1;
+        }
+        else {
+            ID =0;
+        }
+            // Create Income or Expense Object
+        if (type === 'exp') {
+        newItem = new Expense (ID, desc, val);    
+        } else if (type === 'inc') {
+        newItem = new Income (ID, desc, val);
+        }
+        
+            // Adding new item to array
+        data.allItems[type].push(newItem);
+        return newItem;
+        },
+        
+        testItem : function(){
+        console.log (data)
     }
+        
+}
 }();
 
 
@@ -50,10 +101,13 @@ var controller = function (budgCntrl,uiCntrl){
     }
      
     var cntrlAddItem  = function(){
-        var obj = uiCntrl.getInput();
-        console.log (obj);
+        var input, newItem;
+        // Invoke getInput function
+        input = uiCntrl.getInput();
+        // Invoke addItem function
+        newItem = budgCntrl.addItem(input.inType, input.inDesc, input.inValue);
     }
-    
+            
     return {
         init: function() {
             setEventListeners();
