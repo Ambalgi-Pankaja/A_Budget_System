@@ -70,7 +70,9 @@ var DOMStrings = {
     inputType : '.add__type',
     inputDescp : '.add__description',
     inputValue : '.add__value',
-    inbutton : '.add__btn'
+    inbutton : '.add__btn',
+    expenseContainer : '.expenses__list',
+    incomeContainer : '.income__list'
 }
     
     
@@ -83,11 +85,42 @@ return {
         }
     },
     
-    getDOMStrings: DOMStrings 
+    addListItem: function(obj, type){
+        var html, newHtml;
+        
+        // Create HTML string and add placeholder text
+        
+        if (type === 'exp'){
+        html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';    
+        }
+        
+        else if (type === 'inc'){
+        html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix">       <div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';    
+        }
+        
+        // Replace the HTMl String
+        newHtml = html.replace('%id%',obj.id);
+        newHtml = newHtml.replace('%description%', obj.description);
+        newHtml = newHtml.replace('%value%', obj.value);
+        
+        
+        // Insert HTML string in DOM
+        if (type === 'exp'){
+        document.querySelector(DOMStrings.expenseContainer).insertAdjacentHTML('beforeend', newHtml);
+        }
+        else if (type === 'inc'){
+        document.querySelector(DOMStrings.incomeContainer).insertAdjacentHTML('beforeend', newHtml);
+        }
+        
+    },
+    
+    getDOMStrings: DOMStrings,
+    
+    
 }    
 }();
 
-
+// Controller of UI and Budget
 var controller = function (budgCntrl,uiCntrl){
     
     var setEventListeners = function(){
@@ -106,6 +139,8 @@ var controller = function (budgCntrl,uiCntrl){
         input = uiCntrl.getInput();
         // Invoke addItem function
         newItem = budgCntrl.addItem(input.inType, input.inDesc, input.inValue);
+        // Add List of Items in UI
+        addItem = uiCntrl.addListItem(newItem, input.inType);
     }
             
     return {
