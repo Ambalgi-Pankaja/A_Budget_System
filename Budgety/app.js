@@ -38,18 +38,28 @@ return {
 
 
 var controller = function (budgCntrl,uiCntrl){
+    
+    var setEventListeners = function(){
+        var DOM = uiCntrl.getDOMStrings;
+        document.querySelector(DOM.inbutton).addEventListener('click',cntrlAddItem);
+        document.addEventListener('keypress',function(event){
+        if (event.keyCode === 13 || event.which === 13){
+            cntrlAddItem();
+            }
+        });   
+    }
      
     var cntrlAddItem  = function(){
         var obj = uiCntrl.getInput();
         console.log (obj);
     }
-
-    document.querySelector(uiCntrl.getDOMStrings.inbutton).addEventListener('click',cntrlAddItem);
-    document.addEventListener('keypress',function(event){
-        if (event.keyCode === 13 || event.which === 13){
-            cntrlAddItem();
+    
+    return {
+        init: function() {
+            setEventListeners();
         }
-    });
-   
+    } 
     
 }(budgetController,UIController);
+
+controller.init();
